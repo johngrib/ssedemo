@@ -17,6 +17,7 @@
         var source = new EventSource('/chat/connect');
         var form = document.getElementById('form');
         var input = document.getElementById('message');
+        var screen = document.getElementById('screen');
 
         source.addEventListener('open', function (e) {
             console.log('connected');
@@ -26,6 +27,7 @@
             console.log(e.data);
             var message = JSON.parse(e.data);
             console.log(message);
+            screen.innerText += '\n' + message.sender + ' : ' + message.message;
         }, false);
 
         source.addEventListener('error', function (e) {
