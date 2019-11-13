@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>오픈 채팅</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="screen"></div>
+<form id="form">
+    <input id="message" type="text"/>
+    <button type="submit">send</button>
+</form>
+<script>
+    ;(function(){
+        var sender = prompt("이름을 입력하세요");
+        var source = new EventSource('/chat/connect');
+        var form = document.getElementById('form');
+        var input = document.getElementById('message');
+
+        source.addEventListener('open', function (e) {
+            console.log('connected');
+        });
+
+        source.addEventListener('message', function (e) {
+            console.log(e.data);
+            var message = JSON.parse(e.data);
+            console.log(message);
+        }, false);
+
+        source.addEventListener('error', function (e) {
+            if (e.readyState == EventSource.CLOSED) {
+                console.log('error');
+                console.log(e);
+            }
+        }, false);
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            $.post('/chat/send', {sender: sender, message: input.value}, function () {
+                console.log('send message: ' + input.value);
+                input.value = '';
+            });
+        }, false);
+    })();
+</script>
+</body>
+</html>
