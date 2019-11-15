@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
   private final Logger logger = LoggerFactory.getLogger(ChatController.class);
-  private final List<SseEmitter> emitters = new ArrayList<>();
+  private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
   @GetMapping("/connect")
   public SseEmitter connect() {
