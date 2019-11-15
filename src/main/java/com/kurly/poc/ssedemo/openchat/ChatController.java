@@ -18,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RestController
 @RequestMapping("/chat")
 public class ChatController {
+  private static final long DEFAULT_TIMEOUT = 1000L * 60;
   private final Logger logger = LoggerFactory.getLogger(ChatController.class);
   private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
@@ -25,9 +26,10 @@ public class ChatController {
   public SseEmitter connect() {
     logger.info("/connect");
 
-    final SseEmitter emitter = new SseEmitter();
+    final SseEmitter emitter = new SseEmitter(DEFAULT_TIMEOUT);
     emitters.add(emitter);
     emitter.onCompletion(() -> emitters.remove(emitter));
+    emitter.onTimeout(() -> emitters.remove(emitter));
 
     return emitter;
   }
