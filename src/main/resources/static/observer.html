@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>몇 명이나 보고 있나</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="screen"></div>
+<script>
+    ;(function(){
+        var source = new EventSource('/observer/connect');
+        var screen = document.getElementById('screen');
+
+        source.addEventListener('open', function (e) {
+            console.log('connected');
+            console.log(e.data);
+        });
+
+        source.addEventListener('message', function (e) {
+            console.log(e.data);
+            screen.innerText = e.data + " 명이 이 페이지를 보고 있습니다.";
+        }, false);
+
+        source.addEventListener('error', function (e) {
+            if (e.readyState == EventSource.CLOSED) {
+                console.log('error');
+                console.log(e);
+            }
+        }, false);
+
+    })();
+</script>
+</body>
+</html>
