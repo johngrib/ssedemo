@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>방송 서버</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="screen"></div>
+<form id="form">
+    <input id="message" type="text"/>
+    <button type="submit">send</button>
+</form>
+<script>
+    ;(function(){
+        var form = document.getElementById('form');
+        var input = document.getElementById('message');
+        var screen = document.getElementById('screen');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            $.post('/broadcast/notify', {message: input.value}, function (e) {
+                console.log('send message: ' + input.value);
+                screen.innerText = e + "명에게 방송하였습니다.";
+                input.value = '';
+            });
+        }, false);
+    })();
+</script>
+</body>
+</html>
