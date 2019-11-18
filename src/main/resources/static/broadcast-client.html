@@ -8,6 +8,7 @@
 <body>
 <div id="screen"></div>
 <script>
+    const home = '/sse-poc';
     function getTime(str) {
         if (typeof str != 'string' || str == null) {
             return '';
@@ -23,7 +24,7 @@
     }
 
     ;(function () {
-        var source = new EventSource('/broadcast/connect');
+        var source = new EventSource(home + '/broadcast/connect');
         var screen = document.getElementById('screen');
 
         source.addEventListener('open', function (e) {
