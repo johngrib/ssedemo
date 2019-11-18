@@ -33,3 +33,4 @@ out/
 
 ### ctags ###
 tags
+src/main/resources/application.yml
