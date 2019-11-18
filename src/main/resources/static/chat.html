@@ -12,9 +12,10 @@
     <button type="submit">send</button>
 </form>
 <script>
+    const home = '/sse-poc';
     ;(function(){
         var sender = prompt("이름을 입력하세요");
-        var source = new EventSource('/chat/connect');
+        var source = new EventSource(home + '/chat/connect');
         var form = document.getElementById('form');
         var input = document.getElementById('message');
         var screen = document.getElementById('screen');
@@ -40,7 +41,7 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            $.post('/chat/send', {sender: sender, message: input.value}, function () {
+            $.post(home + '/chat/send', {sender: sender, message: input.value}, function () {
                 console.log('send message: ' + input.value);
                 input.value = '';
             });

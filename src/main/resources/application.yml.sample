@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: sse-poc
+
+oauth:
+  datasource:
+    hikari:
+      jdbc-url: jdbc:mariadb:aurora://dummy-db-url:3306/dummy-database
+      driver-class-name: org.mariadb.jdbc.Driver
+      username: dummy-name
+      password: dummy-password
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:28761/eureka/
+

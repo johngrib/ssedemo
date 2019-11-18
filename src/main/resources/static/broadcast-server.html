@@ -12,6 +12,7 @@
     <button type="submit">send</button>
 </form>
 <script>
+    const home = '/sse-poc';
     ;(function(){
         var form = document.getElementById('form');
         var input = document.getElementById('message');
@@ -20,7 +21,7 @@
         form.addEventListener('submit', function (e) {
             e.preventDefault();
 
-            $.post('/broadcast/notify', {message: input.value}, function (e) {
+            $.post(home + '/broadcast/notify', {message: input.value}, function (e) {
                 console.log('send message: ' + input.value);
                 screen.innerText = e + "명에게 방송하였습니다.";
                 input.value = '';

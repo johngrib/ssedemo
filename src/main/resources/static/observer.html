@@ -8,8 +8,9 @@
 <body>
 <div id="screen"></div>
 <script>
+    const home = '/sse-poc';
     ;(function(){
-        var source = new EventSource('/observer/connect');
+        var source = new EventSource(home + '/observer/connect');
         var screen = document.getElementById('screen');
 
         source.addEventListener('open', function (e) {
