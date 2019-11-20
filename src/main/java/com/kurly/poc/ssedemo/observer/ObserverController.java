@@ -1,5 +1,8 @@
 package com.kurly.poc.ssedemo.observer;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 @RestController
 @RequestMapping("/observer")
 public class ObserverController {
@@ -18,6 +18,9 @@ public class ObserverController {
   private final Logger logger = LoggerFactory.getLogger(ObserverController.class);
   private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
 
+  /**
+   * 클라이언트의 구독 요청을 받는다.
+   */
   @GetMapping("/connect")
   public SseEmitter subscribe() {
     logger.info("/connect");
@@ -37,17 +40,17 @@ public class ObserverController {
     return emitter;
   }
 
-  public void broadcast() {
+  private void broadcast() {
     logger.info("broadcast");
     emitters.forEach((SseEmitter emitter) -> {
       try {
         emitter.send(SseEmitter.event().data(emitters.size()));
-      } catch (IllegalStateException | ClientAbortException ignore) {
+      } catch (IllegalStateException | ClientAbortException e) {
         // timeout or completion state
-        logger.warn("unstable event stream connection (reason: {})", ignore.getMessage());
+        logger.warn("unstable event stream connection (reason: {})", e.getMessage());
         emitters.remove(emitter);
-      } catch (Exception ignore) {
-        logger.error("failed to broadcast event to emitter (reason: " + ignore.getMessage() + ")");
+      } catch (Exception e) {
+        logger.error("failed to broadcast event to emitter (reason: " + e.getMessage() + ")");
         emitters.remove(emitter);
       }
     });
